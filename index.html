@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pricing Page Patterns</title>
+<meta name="description" content="Ten pricing page layouts with notes on when each one fits. Copy the HTML.">
+<meta name="ai.description" content="A reference of 10 pricing page layouts: Single tier, Two tier, Three tier with toggle, Feature comparison table, Per-seat with quantity input, Tiered + add-ons, Pay-what-you-want, Annual/monthly toggle, Enterprise contact-only, Free + paid. Each layout is shown rendered, with a note on when it fits and what to watch out for. HTML can be copy-pasted.">
+<style>
+:root{--bg:#ebe7e0;--surface:#fff;--surface-2:#f4f0e8;--ink:#1a1610;--ink-soft:#5a5040;--rule:#d6cebc;--rule-strong:#1a1610;--accent:#9a3412;--accent-soft:#fcd9c3;--mono:ui-monospace,"JetBrains Mono","SF Mono",Menlo,Consolas,monospace;--sans:"Inter",ui-sans-serif,system-ui,-apple-system,sans-serif;--serif:"Iowan Old Style","Charter","Georgia",serif}
+[data-theme="dark"]{--bg:#16110a;--surface:#1f180d;--surface-2:#1a140a;--ink:#f5ecdb;--ink-soft:#bfa988;--rule:#332a18;--rule-strong:#f5ecdb;--accent:#fb923c;--accent-soft:#3a2010}
+[data-theme="dark"] button.primary, [data-theme="dark"] a.primary { color: var(--bg) !important; }
+[data-theme="dark"] button.primary, [data-theme="dark"] a.primary { border-color: var(--accent) !important; }
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);line-height:1.55;font-size:14px;min-height:100vh}
+.skip-link{position:absolute;left:-9999px;top:0;background:var(--accent);color:#fff;padding:.5rem 1rem;z-index:100;font-weight:600}
+.skip-link:focus{left:1rem;top:1rem}
+.layout{max-width:1100px;margin:0 auto;padding:2rem 1.25rem 4rem}
+header{display:grid;grid-template-columns:1fr auto;gap:1.5rem;align-items:end;padding-bottom:1.25rem;border-bottom:1px solid var(--rule-strong);margin-bottom:1.5rem}
+.brand{font-family:var(--mono);font-size:.6875rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:.5rem;font-weight:600}
+h1{font-family:var(--serif);font-size:clamp(1.75rem,4vw,2.5rem);font-weight:700;letter-spacing:-.02em;line-height:1.05}
+h1 .accent{color:var(--accent)}
+.subtitle{margin-top:.5rem;color:var(--ink-soft);font-size:.9375rem;max-width:540px}
+.theme-toggle{background:var(--surface);color:var(--ink);border:1px solid var(--rule-strong);border-radius:3px;padding:.5rem .75rem;font:inherit;font-size:.75rem;font-weight:600;cursor:pointer;text-transform:uppercase;letter-spacing:.06em;display:inline-flex;align-items:center;gap:.4rem;flex-shrink:0}
+.theme-toggle:hover{background:var(--ink);color:var(--bg)}
+.theme-toggle:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.theme-toggle svg{width:14px;height:14px}
+.toc{background:var(--surface);border:1px solid var(--rule);border-radius:3px;padding:1rem 1.25rem;margin-bottom:1.5rem}
+.toc h2{font-family:var(--mono);font-size:.6875rem;text-transform:uppercase;letter-spacing:.07em;font-weight:700;color:var(--accent);margin-bottom:.5rem}
+.toc ol{padding-left:1.25rem;font-size:.875rem;line-height:1.8}
+.toc a{color:var(--ink);text-decoration:none}
+.toc a:hover{color:var(--accent);text-decoration:underline}
+.pattern{margin-bottom:2.5rem;padding-top:1rem;border-top:1px solid var(--rule)}
+.pattern-meta{display:flex;align-items:baseline;gap:.625rem;flex-wrap:wrap;margin-bottom:.4rem}
+.pattern-num{font-family:var(--mono);font-size:.6875rem;font-weight:700;color:var(--accent);letter-spacing:.08em}
+.pattern h2{font-family:var(--serif);font-size:1.375rem;font-weight:700;letter-spacing:-.015em}
+.pattern-when{font-style:italic;color:var(--ink-soft);font-size:.875rem;margin-bottom:.5rem}
+.pattern-watch{background:var(--accent-soft);border:1px solid var(--accent);border-radius:3px;padding:.5rem .75rem;font-size:.75rem;color:var(--accent);margin-bottom:.875rem;font-weight:500}
+.pattern-watch strong{font-weight:700}
+.demo-box{background:var(--surface);border:1px solid var(--rule);border-radius:3px;padding:2rem 1.5rem;margin-bottom:.5rem}
+.code-toggle{background:var(--surface);color:var(--ink);border:1px solid var(--rule-strong);border-radius:3px;padding:.4rem .75rem;font:inherit;font-size:.6875rem;font-weight:600;cursor:pointer;text-transform:uppercase;letter-spacing:.06em;font-family:var(--mono)}
+.code-toggle:hover{background:var(--ink);color:var(--bg)}
+.code-block{display:none;background:var(--surface-2);border:1px solid var(--rule);border-radius:3px;padding:.75rem;margin-top:.5rem;font-family:var(--mono);font-size:.75rem;white-space:pre-wrap;word-break:break-word;max-height:400px;overflow-y:auto}
+.code-block.show{display:block}
+/* Pattern demos: simple, neutral styles */
+.tier-grid{display:grid;gap:1rem}
+.tier-1{grid-template-columns:1fr;max-width:360px;margin:0 auto}
+.tier-2{grid-template-columns:1fr 1fr}
+.tier-3{grid-template-columns:1fr 1fr 1fr}
+@media(max-width:640px){.tier-2,.tier-3{grid-template-columns:1fr}}
+.tier{background:var(--bg);border:1px solid var(--rule);border-radius:4px;padding:1.25rem 1rem}
+.tier.featured{border-color:var(--accent);position:relative}
+.tier.featured::before{content:"Most popular";position:absolute;top:-.625rem;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;padding:.15rem .625rem;font-size:.625rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;border-radius:2px;font-family:var(--mono)}
+.tier-name{font-family:var(--serif);font-size:1.125rem;font-weight:700;margin-bottom:.2rem}
+.tier-price{font-family:var(--mono);font-size:1.625rem;font-weight:700;color:var(--ink);margin-bottom:.4rem}
+.tier-price .per{font-size:.75rem;color:var(--ink-soft);font-weight:500}
+.tier-desc{font-size:.8125rem;color:var(--ink-soft);margin-bottom:.625rem}
+.tier-features{font-size:.8125rem;list-style:none;margin-bottom:.875rem}
+.tier-features li{padding:.2rem 0;display:flex;align-items:flex-start;gap:.4rem}
+.tier-features li::before{content:"+";color:var(--accent);font-weight:700;flex-shrink:0}
+.tier-cta{display:block;width:100%;padding:.55rem;text-align:center;background:var(--ink);color:var(--bg);text-decoration:none;border-radius:3px;font-size:.8125rem;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.tier.featured .tier-cta{background:var(--accent);color:#fff}
+.tier-cta:hover{filter:brightness(.92)}
+.toggle-row{display:flex;justify-content:center;gap:.5rem;margin-bottom:1rem}
+.toggle-btn{background:var(--surface);color:var(--ink);border:1px solid var(--rule);padding:.4rem 1rem;cursor:pointer;font:inherit;font-size:.8125rem;font-weight:600;border-radius:3px}
+.toggle-btn.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.compare-table{width:100%;border-collapse:collapse;font-size:.8125rem}
+.compare-table th,.compare-table td{padding:.5rem;border-bottom:1px solid var(--rule);text-align:left}
+.compare-table th{font-family:var(--mono);font-size:.6875rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft)}
+.compare-table .yes{color:var(--accent)}
+.compare-table .no{color:var(--ink-soft);opacity:.5}
+.qty-row{display:flex;align-items:center;gap:1rem;justify-content:center}
+.qty-input{width:80px;padding:.4rem;text-align:center;font-family:var(--mono);font-size:1rem;border:1px solid var(--rule);border-radius:3px;background:var(--bg);color:var(--ink)}
+.qty-result{font-family:var(--mono);font-size:1.5rem;font-weight:700}
+.range-row{display:flex;align-items:center;gap:1rem;flex-direction:column}
+.range-row input[type="range"]{width:100%;max-width:300px}
+.contact-card{background:var(--bg);border:1px dashed var(--rule);padding:2rem;text-align:center;border-radius:4px}
+footer{margin-top:2.5rem;padding-top:1.25rem;border-top:1px solid var(--rule);font-size:.75rem;color:var(--ink-soft);line-height:1.7}
+footer a{color:var(--ink-soft);text-decoration:underline;text-underline-offset:2px}
+footer a:hover{color:var(--accent)}
+@media(max-width:540px){.layout{padding:1.25rem 1rem 3rem}h1{font-size:1.5rem}header{grid-template-columns:1fr}}
+</style>
+</head>
+<body data-theme="light">
+<a href="#main" class="skip-link">Skip to main</a>
+<div class="layout">
+<header>
+<div>
+<div class="brand">PRICING // PATTERNS</div>
+<h1>Ten pricing layouts. <span class="accent">When to use each.</span></h1>
+<p class="subtitle">Browse rendered examples. Each one notes when it fits and what to watch out for. Copy the HTML.</p>
+</div>
+<button type="button" class="theme-toggle" id="theme-btn" aria-label="Toggle theme" aria-pressed="false">
+<svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+<circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+</svg>
+<span id="theme-label">Dark</span>
+</button>
+</header>
+<main id="main">
+<nav class="toc">
+<h2>Patterns</h2>
+<ol>
+<li><a href="#p1">Single tier</a> — when there's one product, one price</li>
+<li><a href="#p2">Two tier (free + paid)</a> — the most common saas pattern</li>
+<li><a href="#p3">Three tier with badge</a> — when you have a clear "most popular"</li>
+<li><a href="#p4">Annual/monthly toggle</a> — when you want to incentivize annual</li>
+<li><a href="#p5">Per-seat with quantity input</a> — for team-priced tools</li>
+<li><a href="#p6">Feature comparison table</a> — for plans differentiated by capability</li>
+<li><a href="#p7">Tiered + add-ons</a> — for usage-based components</li>
+<li><a href="#p8">Pay what you want</a> — for indie/community/educational</li>
+<li><a href="#p9">Enterprise contact-only</a> — for plans that need a sales call</li>
+<li><a href="#p10">Free + paid (no tiers)</a> — for tools where one paid plan covers all</li>
+</ol>
+</nav>
+
+<section class="pattern" id="p1">
+<div class="pattern-meta"><span class="pattern-num">PATTERN 01</span></div>
+<h2>Single tier</h2>
+<p class="pattern-when">When there's one product, one price. Newsletters, simple tools, one-time purchases.</p>
+<div class="pattern-watch"><strong>Watch:</strong> Visitors look for tiers and feel something is missing. Add a clear "what you get" list to fill the gap.</div>
+<div class="demo-box">
+<div class="tier-grid tier-1">
+<div class="tier">
+<div class="tier-name">Standard</div>
+<div class="tier-price">$29<span class="per"> / month</span></div>
+<div class="tier-desc">Everything you need.</div>
+<ul class="tier-features"><li>All features</li><li>Unlimited usage</li><li>Email support</li><li>Lifetime updates</li></ul>
+<a class="tier-cta" href="#" onclick="return false">Get started</a>
+</div>
+</div>
+</div>
+<button class="code-toggle" data-target="code1">View HTML</button>
+<pre class="code-block" id="code1"><code>&lt;div class="tier"&gt;
+  &lt;div class="tier-name"&gt;Standard&lt;/div&gt;
+  &lt;div class="tier-price"&gt;$29&lt;span class="per"&gt; / month&lt;/span&gt;&lt;/div&gt;
+  &lt;div class="tier-desc"&gt;Everything you need.&lt;/div&gt;
+  &lt;ul class="tier-features"&gt;
+    &lt;li&gt;All features&lt;/li&gt;
+    &lt;li&gt;Unlimited usage&lt;/li&gt;
+    &lt;li&gt;Email support&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;a class="tier-cta" href="#"&gt;Get started&lt;/a&gt;
+&lt;/div&gt;</code></pre>
+</section>
+
+<section class="pattern" id="p2">
+<div class="pattern-meta"><span class="pattern-num">PATTERN 02</span></div>
+<h2>Two tier (free + paid)</h2>
+<p class="pattern-when">When you have a free tier that's enough to evaluate the product and a paid tier that unlocks the rest.</p>
+<div class="pattern-watch"><strong>Watch:</strong> The free tier needs to be useful. If it's a 5-call demo, visitors leave thinking the paid tier doesn't work either.</div>
+<div class="demo-box">
+<div class="tier-grid tier-2">
+<div class="tier">
+<div class="tier-name">Free</div>
+<div class="tier-price">$0</div>
+<div class="tier-desc">For trying things out.</div>
+<ul class="tier-features"><li>5 projects</li><li>Public sharing</li><li>Community support</li></ul>
+<a class="tier-cta" href="#" onclick="return false" style="background:var(--surface);color:var(--ink);border:1px solid var(--rule-strong)">Sign up free</a>
+</div>
+<div class="tier featured">
+<div class="tier-name">Pro</div>
+<div class="tier-price">$19<span class="per"> / month</span></div>
+<div class="tier-desc">For active builders.</div>
+<ul class="tier-features"><li>Unlimited projects</li><li>Private projects</li><li>Email support</li><li>Custom domains</li></ul>
+<a class="tier-cta" href="#" onclick="return false">Start trial</a>
+</div>
+</div>
+</div>
+</section>
+
+<section class="pattern" id="p3">
+<div class="pattern-meta"><span class="pattern-num">PATTERN 03</span></div>
+<h2>Three tier with featured badge</h2>
+<p class="pattern-when">Most common SaaS pattern. The middle plan is highlighted as "Most popular" to anchor decision-making.</p>
+<div class="pattern-watch"><strong>Watch:</strong> Only highlight the middle plan if it actually IS the most popular. Otherwise the manipulation reads as such.</div>
+<div class="demo-box">
+<div class="tier-grid tier-3">
+<div class="tier">
+<div class="tier-name">Starter</div>
+<div class="tier-price">$9<span class="per"> / mo</span></div>
+<ul class="tier-features"><li>1 user</li><li>10 projects</li><li>Basic support</li></ul>
+<a class="tier-cta" href="#" onclick="return false" style="background:var(--surface);color:var(--ink);border:1px solid var(--rule-strong)">Choose</a>
+</div>
+<div class="tier featured">
+<div class="tier-name">Pro</div>
+<div class="tier-price">$29<span class="per"> / mo</span></div>
+<ul class="tier-features"><li>5 users</li><li>Unlimited projects</li><li>Priority support</li><li>API access</li></ul>
+<a class="tier-cta" href="#" onclick="return false">Choose</a>
+</div>
+<div class="tier">
+<div class="tier-name">Team</div>
+<div class="tier-price">$99<span class="per"> / mo</span></div>
+<ul class="tier-features"><li>20 users</li><li>SSO</li><li>SLA</li><li>Dedicated support</li></ul>
+<a class="tier-cta" href="#" onclick="return false" style="background:var(--surface);color:var(--ink);border:1px solid var(--rule-strong)">Choose</a>
+</div>
+</div>
+</div>
+</section>
+
+<section class="pattern" id="p4">
+<div class="pattern-meta"><span class="pattern-num">PATTERN 04</span></div>
+<h2>Annual/monthly toggle</h2>
+<p class="pattern-when">When you want to push annual billing without hiding monthly. The discount is real and visible.</p>
+<div class="pattern-watch"><strong>Watch:</strong> Show both prices unambiguously. If a visitor sees "$10/mo" and signs up expecting monthly billing, then sees a $120 charge, you have a chargeback.</div>
+<div class="demo-box">
+<div class="toggle-row">
+<button class="toggle-btn on" data-period="monthly">Monthly</button>
+<button class="toggle-btn" data-period="annual">Annual (save 20%)</button>
+</div>
+<div class="tier-grid tier-2">
+<div class="tier">
+<div class="tier-name">Hobby</div>
+<div class="tier-price"><span class="price-monthly">$10</span><span class="price-annual" style="display:none">$96</span><span class="per"><span class="per-monthly"> / month</span><span class="per-annual" style="display:none"> / year ($8/mo)</span></span></div>
+<ul class="tier-features"><li>Personal use</li><li>5 projects</li></ul>
+<a class="tier-cta" href="#" onclick="return false">Start</a>
+</div>
+<div class="tier featured">
+<div class="tier-name">Pro</div>
+<div class="tier-price"><span class="price-monthly">$25</span><span class="price-annual" style="display:none">$240</span><span class="per"><span class="per-monthly"> / month</span><span class="per-annual" style="display:none"> / year ($20/mo)</span></span></div>
+<ul class="tier-features"><li>Commercial use</li><li>Unlimited projects</li><li>Priority support</li></ul>
+<a class="tier-cta" href="#" onclick="return false">Start</a>
+</div>
+</div>
+</div>
+</section>
+
+<section class="pattern" id="p5">
+<div class="pattern-meta"><span class="pattern-num">PATTERN 05</span></div>
+<h2>Per-seat with quantity input</h2>
+<p class="pattern-when">For team tools. Lets buyers self-quote without contacting sales.</p>
+<div class="pattern-watch"><strong>Watch:</strong> Make sure the math is shown. Just an input and a button is opaque; show the calculation.</div>
+<div class="demo-box">
+<div class="qty-row">
+<label for="seat-qty" style="font-weight:600">Seats:</label>
+<input type="number" class="qty-input" id="seat-qty" value="5" min="1" max="100">
+<span style="color:var(--ink-soft)">x $12 / seat / month =</span>
+<span class="qty-result" id="qty-total">$60</span>
+<span style="color:var(--ink-soft);font-size:.875rem">/ month</span>
+</div>
+</div>
+</section>
+
+<section class="pattern" id="p6">
+<div class="pattern-meta"><span class="pattern-num">PATTERN 06</span></div>
+<h2>Feature comparison table</h2>
+<p class="pattern-when">When plans differ in capability rather than just usage limits. Lets users find the cheapest plan that has what they need.</p>
+<div class="pattern-watch"><strong>Watch:</strong> Don't list every feature; list the ones that differentiate. A 50-row table is unreadable.</div>
+<div class="demo-box">
+<table class="compare-table">
+<thead><tr><th>Feature</th><th>Free</th><th>Pro</th><th>Team</th></tr></thead>
+<tbody>
+<tr><td>Projects</td><td>3</td><td>Unlimited</td><td>Unlimited</td></tr>
+<tr><td>Custom domain</td><td class="no">No</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+<tr><td>API access</td><td class="no">No</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+<tr><td>SSO/SAML</td><td class="no">No</td><td class="no">No</td><td class="yes">Yes</td></tr>
+<tr><td>Audit log</td><td class="no">No</td><td class="no">No</td><td class="yes">Yes</td></tr>
+<tr><td>Support</td><td>Community</td><td>Email</td><td>Slack channel</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section class="pattern" id="p7">
+<div class="pattern-meta"><span class="pattern-num">PATTERN 07</span></div>
+<h2>Tiered + usage-based add-ons</h2>
+<p class="pattern-when">For products with a base subscription plus consumption (API calls, storage, bandwidth).</p>
+<div class="pattern-watch"><strong>Watch:</strong> Be explicit about what counts as overage and how it's charged. Surprise overage bills create chargebacks.</div>
+<div class="demo-box">
+<div class="tier-grid tier-2">
+<div class="tier">
+<div class="tier-name">Pro</div>
+<div class="tier-price">$29<span class="per"> / mo + usage</span></div>
+<ul class="tier-features"><li>Includes 100k API calls/mo</li><li>Includes 10 GB storage</li><li>$0.001 per additional API call</li><li>$0.10 per additional GB</li></ul>
+<a class="tier-cta" href="#" onclick="return false">Start</a>
+</div>
+<div class="tier featured">
+<div class="tier-name">Scale</div>
+<div class="tier-price">$199<span class="per"> / mo + usage</span></div>
+<ul class="tier-features"><li>Includes 5M API calls/mo</li><li>Includes 500 GB storage</li><li>$0.0005 per additional API call</li><li>$0.05 per additional GB</li></ul>
+<a class="tier-cta" href="#" onclick="return false">Start</a>
+</div>
+</div>
+</div>
+</section>
+
+<section class="pattern" id="p8">
+<div class="pattern-meta"><span class="pattern-num">PATTERN 08</span></div>
+<h2>Pay what you want</h2>
+<p class="pattern-when">For indie products, educational content, community-supported tools. Trades revenue per user for goodwill and reach.</p>
+<div class="pattern-watch"><strong>Watch:</strong> Set a sensible minimum (often $0, sometimes a few dollars). Suggest typical amounts but don't shame people who pay less.</div>
+<div class="demo-box">
+<div class="range-row">
+<div style="font-family:var(--mono);font-size:1.5rem;font-weight:700"><span id="pwyw-display">$15</span></div>
+<input type="range" id="pwyw-range" min="0" max="50" value="15">
+<div style="display:flex;justify-content:space-between;width:100%;max-width:300px;font-size:.75rem;color:var(--ink-soft);font-family:var(--mono)"><span>Free</span><span>Suggested $15</span><span>$50</span></div>
+<a class="tier-cta" href="#" onclick="return false" style="max-width:200px;margin-top:.5rem">Buy</a>
+</div>
+</div>
+</section>
+
+<section class="pattern" id="p9">
+<div class="pattern-meta"><span class="pattern-num">PATTERN 09</span></div>
+<h2>Enterprise: contact-only</h2>
+<p class="pattern-when">For plans that genuinely require a sales call (custom contracts, procurement, integrations).</p>
+<div class="pattern-watch"><strong>Watch:</strong> Hide pricing only when you have to. If your "Enterprise" plan is just Pro with SSO, publish the price. Hidden pricing for sub-$10k tools reads as untrustworthy.</div>
+<div class="demo-box">
+<div class="contact-card">
+<div class="tier-name" style="margin-bottom:.4rem">Enterprise</div>
+<div style="color:var(--ink-soft);margin-bottom:.875rem;max-width:480px;margin-left:auto;margin-right:auto">For organizations with 100+ users, custom security requirements, or specific integrations.</div>
+<a class="tier-cta" href="#" onclick="return false" style="display:inline-block;width:auto;padding-left:2rem;padding-right:2rem">Talk to sales</a>
+<div style="font-size:.75rem;color:var(--ink-soft);margin-top:.625rem">Plans start at $5,000/year. Most contracts close in 2-3 weeks.</div>
+</div>
+</div>
+</section>
+
+<section class="pattern" id="p10">
+<div class="pattern-meta"><span class="pattern-num">PATTERN 10</span></div>
+<h2>Free + paid (no tiers)</h2>
+<p class="pattern-when">When the paid version covers every use case and the free tier is the trial. Less choice, faster decision.</p>
+<div class="pattern-watch"><strong>Watch:</strong> This works when the paid version is genuinely simple ("$10/mo, everything"). If you need "everything for solo, more for team," go to two tiers.</div>
+<div class="demo-box">
+<div class="tier-grid tier-2">
+<div class="tier">
+<div class="tier-name">Free</div>
+<div class="tier-price">$0</div>
+<div class="tier-desc">Try it. No credit card.</div>
+<ul class="tier-features"><li>Limit: 50 actions / month</li><li>All features</li></ul>
+<a class="tier-cta" href="#" onclick="return false" style="background:var(--surface);color:var(--ink);border:1px solid var(--rule-strong)">Sign up</a>
+</div>
+<div class="tier featured">
+<div class="tier-name">Paid</div>
+<div class="tier-price">$10<span class="per"> / month</span></div>
+<div class="tier-desc">Unlimited everything.</div>
+<ul class="tier-features"><li>Unlimited actions</li><li>All features</li><li>Email support</li></ul>
+<a class="tier-cta" href="#" onclick="return false">Subscribe</a>
+</div>
+</div>
+</div>
+</section>
+
+</main>
+<footer>
+<p>Source: <a href="https://github.com/0xelitesystem/pricing-page-patterns" target="_blank" rel="noopener">github.com/0xelitesystem/pricing-page-patterns</a></p>
+<p>Related: <a href="https://github.com/0xelitesystem/landing-page-anti-patterns" target="_blank" rel="noopener">landing-page-anti-patterns</a> &middot; <a href="https://github.com/0xelitesystem/single-file-saas-template" target="_blank" rel="noopener">single-file-saas-template</a></p>
+<p>The patterns above are starting points, not laws. The right pricing depends on your customer, your competitors, and how much friction you can absorb.</p>
+</footer>
+</div>
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+
+// Code toggle buttons
+document.querySelectorAll(".code-toggle").forEach(b=>{
+  b.addEventListener("click",()=>{
+    const t=document.getElementById(b.dataset.target);
+    if(t){t.classList.toggle("show");b.textContent=t.classList.contains("show")?"Hide HTML":"View HTML"}
+  });
+});
+
+// Pattern 4: monthly/annual toggle
+document.querySelectorAll(".toggle-btn").forEach(b=>{
+  b.addEventListener("click",()=>{
+    document.querySelectorAll(".toggle-btn").forEach(t=>t.classList.remove("on"));
+    b.classList.add("on");
+    const annual=b.dataset.period==="annual";
+    document.querySelectorAll(".price-monthly,.per-monthly").forEach(el=>el.style.display=annual?"none":"");
+    document.querySelectorAll(".price-annual,.per-annual").forEach(el=>el.style.display=annual?"":"none");
+  });
+});
+
+// Pattern 5: per-seat
+const qtyInput=$("seat-qty"),qtyTotal=$("qty-total");
+function updateQty(){const n=parseInt(qtyInput.value,10)||1;qtyTotal.textContent="$"+(n*12)}
+qtyInput.addEventListener("input",updateQty);
+
+// Pattern 8: pay-what-you-want
+const pwywRange=$("pwyw-range"),pwywDisplay=$("pwyw-display");
+pwywRange.addEventListener("input",()=>pwywDisplay.textContent="$"+pwywRange.value);
+
+function applyTheme(t){
+  document.body.dataset.theme=t;
+  $("theme-label").textContent=t==="dark"?"Light":"Dark";
+  $("theme-btn").setAttribute("aria-pressed",String(t==="dark"));
+  const icon=$("theme-icon");
+  if(t==="dark")icon.innerHTML='<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+  else icon.innerHTML='<circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>';
+}
+$("theme-btn").addEventListener("click",()=>applyTheme(document.body.dataset.theme==="dark"?"light":"dark"));
+if(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)applyTheme("dark");
+</script>
+</body>
+</html>
