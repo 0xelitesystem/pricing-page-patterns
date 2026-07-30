@@ -33,6 +33,10 @@ Most "pricing page inspiration" galleries are screenshots of pretty pages. They 
 - Name the failure mode for each (what to avoid)
 - Give you the markup to start from
 
+## More
+
+Part of a catalog of single-file browser tools and plain-language references, all MIT licensed and dependency-free: [0xelitesystem.github.io](https://0xelitesystem.github.io/). Built by [elitesystem.ai](https://elitesystem.ai).
+
 ## License
 
 MIT for the HTML and the catalog text. Use it however you want.
